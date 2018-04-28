@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        #canvas1 {
+            background-color: aqua;
+        }
+    </style>
+    <script>
+        'use strict';
+        window.onerror = function (e) { alert('Meine Fehlermeldung!: ' + e) };
+        window.onload = function () {
+
+            //Mous Event Abfangen
+            //window.addEventListener('mousemove', handler_Mouse)
+            canvas1.addEventListener('mousemove', handler_Mouse)
+
+            //Gib Zeichenfläche
+            var c = canvas1.getContext('2d');
+            //Style für Striche
+            c.strokeStyle = "#FF0000";;
+            c.lineWidth = 20;
+
+            var flag = true;
+            function handler_Mouse(e) {
+                //Das nach Mouse loslassen wieder neu Angesetzt wird :)
+                if (e.buttons === 0)
+                    flag = true;
+                if(e.buttons === 1){
+                    if (flag) {
+                        //Stift Ansetzen
+                        c.moveTo(e.offsetX, e.offsetY);
+                        flag = false;
+                    } else {
+                        //Zeichnen
+                        c.lineTo(e.offsetX, e.offsetY);
+                        c.stroke();
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+</head>
+
+<body>
+
+    <canvas style="margin:50px" id="canvas1" height="800" width="1700"></canvas>
+
+</body>
+
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        #canvas1 {
+            background-color: aqua;
+        }
+    </style>
+    <script>
+        'use strict';
+        window.onerror = function (e) { alert('Meine Fehlermeldung!: ' + e) };
+        window.onload = function () {
+            //Aufzeichnen geht damit nicht nur Abspielen.
+            //MultiLine Aufzeichnen mit canvas_Zeichnen_Projekt_Verlauf.html
+
+            //Deklarationen
+            var flag = true;
+            var arr_aufzeichnen = [];
+            var generator;
+            var daten_obj;
+            //Wiiiiiiiiiiiiiiiichtig!!
+            var verlauf = localStorage.length;
+            var y;
+
+            //Events 
+            //canvas1.addEventListener('mousemove', handler_Mouse_move);
+            //canvas1.addEventListener('mouseup', handler_up_speichern);
+            //canvas1.addEventListener('mousedown', handler_down);
+            button_abspielen1.addEventListener('click', handlerNeuZeichnen);
+            button_canvas_löschen1.addEventListener('click', handler_canvas_löschen);
+            button_animation1.addEventListener('click', handler_animation_start);
+
+            //Zeichnen Fläche geben
+            var c = canvas1.getContext('2d');
+            //Grundsatzeinstellungen machen:
+            c.strokeStyle = "#FF0000";;
+            c.lineWidth = 20;
+
+            //******Animation******************************************************************  
+            function handler_animation_start() {
+                flag = true;
+                y = 1;
+                generator = datenAuslesenGenerator('daten' + y)
+                handler_animation();
+            }
+            //MultiLine Animations Schleife! :)))))
+            function handler_animation() {
+                daten_obj = generator.next();
+                //Ausstiegspunkt!
+                if (daten_obj.done) {
+                    c.closePath();
+                    if (y < verlauf) {
+                        ++y;
+                        generator = datenAuslesenGenerator('daten' + y)
+                        flag = true;
+                        handler_animation();
+                    } else {
+                        //Das immer wieder von vorne Startet! :))
+                        //Die Zeichnung kurz stehenlassen!
+                        setTimeout(handler_canvas_löschen, 500);
+                        //Neustart etwas Verzögern das besser aussieht
+                        setTimeout(handler_animation_start, 600);
+                    }
+                    return;
+                }
+
+                zeichnen(daten_obj.value);
+
+                //setTimeout(handler_animation, 100);
+                //handler_animation();
+                requestAnimationFrame(handler_animation);
+            }
+            //************************************************************************************
+
+            function handler_canvas_löschen() {
+                c.clearRect(0, 0, 1700, 800)
+                //location.reload();
+            }
+
+
+
+            /*function handler_up_speichern() {
+                c.closePath();
+                //Zeichnet nur Strings auf!
+                localStorage.daten1 = arr_aufzeichnen;
+                //Array nach Auslesen löschen!!!
+                arr_aufzeichnen = [];
+            }*/
+
+            function* datenAuslesenGenerator(d) {
+                //Storage Auslesen
+                var daten_string = localStorage[d]
+                //String Auflösen
+                var arr_daten_str = daten_string.split(',');
+
+                var werte_x_y_arr = [];
+                for (var x = 0; x < arr_daten_str.length; x++) {
+                    werte_x_y_arr = arr_daten_str[x].split(':');
+                    //Verpacken in Objekt wie Mouse Event(e)
+                    yield { offsetX: werte_x_y_arr[0], offsetY: werte_x_y_arr[1] };
+                }
+            }
+
+            function handlerNeuZeichnen() {
+                for (var y = 1; y <= verlauf; y++) {
+                    flag = true;
+                    for (var d of datenAuslesenGenerator('daten' + y)) {
+                        zeichnen(d);
+                    }
+                    c.closePath();
+                }
+            }
+
+            //+++++Entscheident das keine Unterbrüche mehr+++++++++++++++++++++++++++++
+            /*function handler_down() {
+                flag = true;
+            }*/
+            /*function handler_Mouse_move(e) {
+                if (e.buttons === 1) {
+                    //aufzeichnen(e);
+                    //zeichnen(e);
+                }
+            }*/
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            /*function aufzeichnen(e) {
+                arr_aufzeichnen.push(e.offsetX + ":" + e.offsetY);
+            }*/
+
+            function zeichnen(e) {
+                //Weniger Probleme wenn hier Deklariert
+                var x = e.offsetX;
+                var y = e.offsetY;
+                if (flag) {
+                    //Stift Ansetzen
+                    c.beginPath();
+                    c.moveTo(x, y);
+                    flag = false;
+                } else {
+                    //Zeichnen
+                    c.lineTo(x, y);
+                    //c.closePath();//Interessanter Effekt alles vom gleichen Punkt zur Maus! :)
+                    c.stroke();
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <input type="button" id="button_abspielen1" value="Neu Zeichnen">
+    <input type="button" id="button_canvas_löschen1" value="Löschen">
+    <input type="button" id="button_animation1" value="Animation">
+
+    <br>
+    <canvas style="margin:50px" id="canvas1" height="800" width="1700"></canvas>
+</body>
+
+</html>

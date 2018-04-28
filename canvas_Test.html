@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        #canvas1 {
+            background-color: aqua;
+        }
+    </style>
+    <script>
+        'use strict';
+        window.onerror = function (e) { alert('Meine Fehlermeldung!: ' + e) };
+        window.onload = function () {
+
+            if (canvas1.getContext) {
+                let c = canvas1.getContext('2d');
+                //Einstellung
+                c.shadowColor = "black";
+                c.shadowBlur = 50;
+                c.fillRect(10, 100, 500, 200)
+
+            }
+
+
+
+
+        }
+
+    </script>
+</head>
+
+<body>
+
+    <canvas id="canvas1" height="800" width="1700"></canvas>
+
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        #canvas1 {
+            background-color: aqua;
+        }
+    </style>
+    <script>
+        'use strict';
+        window.onerror = function (e) { alert('Meine Fehlermeldung!: ' + e) };
+        window.onload = function () {
+
+
+            if (canvas1.getContext) {
+                let c = canvas1.getContext('2d');
+                //Style
+                c.strokeStyle="#FF0000";;
+                c.lineWidth=1;
+                //Zeichnen
+                c.moveTo(10, 10);
+                c.lineTo(300,300);
+                c.stroke();
+               
+                
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+
+    <canvas style="margin:50px" id="canvas1" height="800" width="1700"></canvas>
+
+</body>
+
+</html>

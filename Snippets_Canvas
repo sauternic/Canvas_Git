@@ -1,0 +1,19 @@
+https://www.w3schools.com/tags/ref_canvas.asp
+
+Beispiele Farbwerte setzen:
+
+c.fillStyle = "orange";
+c.fillStyle = "#FFA500";
+c.fillStyle = "rgb(255,165,0)";
+c.fillStyle = "rgba(255,165,0,1)";
+
+
+
+Colors, Styles, and Shadows:
+
+c.fillStyle="#FF0000";
+c.strokeStyle="#FF0000";
+c.shadowColor="black";
+c.shadowBlur=20;
+c.shadowOffsetX=20;
+c.shadowOffsetY=20;
